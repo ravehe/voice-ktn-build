@@ -2,7 +2,13 @@
 # and exports them as xwave files (.lab) with the same names as the TextGrids.
 
 
-Create Strings as file list... fileList tg/*.TextGrid
+form Files
+	comment What is the name of the folder containing the TextGrids?
+	sentence folderIn tg
+endform
+
+
+Create Strings as file list... fileList 'folderIn$'/*.TextGrid
 
 x = Get number of strings
 for i to x
