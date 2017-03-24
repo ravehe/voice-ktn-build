@@ -1,0 +1,72 @@
+plugins {
+    id "de.dfki.mary.voicebuilding-legacy" version "5.2.0"
+    id "de.undercouch.download" version "3.2.0"
+}
+
+//apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+group 'de.uni-saarland.voicebuilding.group2'
+version '0.1-SNAPSHOT'
+
+//sourceCompatibility = 1.8
+
+import de.undercouch.gradle.tasks.download.Download
+def dataURL = "https://github.com/ioonaa/voice-ktn-data/archive/master.zip"
+def dataZip = "$buildDir/data.zip"
+
+task downloadData(type: Download) {
+    //how to handle up-to-date? (overwrite or output?)
+    src dataURL
+    dest dataZip
+    overwrite false
+}
+
+task extractWav(type: Copy) {
+    //cut flac
+    //convert to 1616
+}
+
+task extractTxt(type: Copy) {
+    dependsOn downloadData
+    from zipTree(dataZip), {
+        include '**/txt/*.txt'
+        eachFile {
+            it.path = it.name
+        }
+    }
+    into "$buildDir/txt"
+
+    //already have texts (used as input for MAUS)
+}
+
+task extractTG(type: Copy) {
+    dependsOn downloadData
+    from zipTree(dataZip), {
+        include '**/tg/*.TextGrid'
+        eachFile {
+            it.path = it.name
+        }
+    }
+    into "$buildDir/tg"
+}
+
+task makeLab(type: Exec) {
+    dependsOn extractTG
+    def script = file("$buildDir/scripts/tg_to_xwaves.praat")
+    commandLine "praat", "--run", script, "$buildDir/tg"
+}
+
+task moveLab(type: Copy) {
+    from "$buildDir/script/", {
+        include '**/*.lab'
+    }
+    into "$buildDir/lab/"
+}
+
+legacyInit {
+    dependsOn extractWav, extractTxt, makeLab
+}
