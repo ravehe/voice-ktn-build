@@ -13,7 +13,7 @@ Create Strings as file list... fileList 'folderIn$'/*.TextGrid
 x = Get number of strings
 for i to x
 	fileName$ = Get string: i	
-	Read from file: "tg/" + fileName$
+	Read from file: "'folderIn$'/'fileName$'"
 	Extract tier... 1
 	fileName$ = replace_regex$(fileName$, "\.TextGrid", "", 0)
 	Save as Xwaves label file... 'fileName$'.lab
