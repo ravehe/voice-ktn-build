@@ -9,3 +9,8 @@ build/
 .idea/
 *.iml
 *.orig
+
+# Outputs
+*.flac
+*.wav
+*.lab
