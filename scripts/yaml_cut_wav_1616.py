@@ -12,6 +12,10 @@
 import os, yaml
 
 yamlf = yaml.safe_load(open("merged.yaml"))
+if len(sys.argv) != 3:
+    print("Error: exactly two parameters are expected!\n")
+    print("Usage: python yaml_cut_wav_1616.py <yaml-file> <flac-file>\n")
+
 for stim in yamlf["stimuli"]:
     os.system("sox group2_mic1.flac " +
               stim["label"] +
