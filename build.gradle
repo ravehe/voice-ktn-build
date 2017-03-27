@@ -86,6 +86,48 @@ task moveLab(type: Copy) {
         include '**/*.lab'
     }
     into "$buildDir/lab/"
+    filter {
+        def phoneMapping = [
+                '<p:>': '_',
+                'i:'  : 'i',
+                'O:'  : 'O',
+                '3`'  : 'r=',
+                'Q'   : 'A',
+                'R'   : 'r',
+                'u:'  : 'u',
+                'aI'  : 'AI',
+                'eI'  : 'EI',
+                '?' : '_',
+                'h-' : 'h',
+                '6' : 'r=',
+                '4' : 'd',
+                'I@' : 'I',
+                '<usb>' : '_',
+                'm=' : 'r',
+                'l=' : 'l',
+                'n=' : 'n',
+                'a:' : 'a',
+                'a' : 'A',
+                'o:' : 'O',
+                'y:' : 'I',
+                'e' : 'E',
+                'e:' : 'E',
+                'E:' : 'E',
+                'OY' : 'OI',
+                'y' : 'I',
+                'o' : 'O',
+                '9' : 'V',
+                'x' : 'k',
+                'C' : 'S',
+                'Y' : 'I',
+                '2:' : 'r='
+        ]
+        def fields = it.tokenize()
+        if (fields.size() == 3) {
+            fields[-1] = phoneMapping[fields[-1]] ?: fields[-1]
+        }
+        fields.join(' ')
+    }
 }
 
 legacyInit {
