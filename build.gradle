@@ -56,12 +56,12 @@ task extractTG(type: Copy) {
 
 task makeLab(type: Exec) {
     dependsOn extractTG
-    def script = file("$buildDir/scripts/tg_to_xwaves.praat")
+    def script = file("$rootDir/scripts/tg_to_xwaves.praat")
     commandLine "praat", "--run", script, "$buildDir/tg"
 }
 
 task moveLab(type: Copy) {
-    from "$buildDir/script/", {
+    from "$rootDir/scripts/", {
         include '**/*.lab'
     }
     into "$buildDir/lab/"
