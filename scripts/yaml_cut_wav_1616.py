@@ -9,15 +9,15 @@
 #!/usr/bin/env_python
 # encoding: UTF-8
 
-import os, yaml
+import os, yaml, sys
 
-yamlf = yaml.safe_load(open("merged.yaml"))
 if len(sys.argv) != 3:
     print("Error: exactly two parameters are expected!\n")
     print("Usage: python yaml_cut_wav_1616.py <yaml-file> <flac-file>\n")
 
+yamlf = yaml.safe_load(open(sys.argv[1]))
 for stim in yamlf["stimuli"]:
-    os.system("sox group2_mic1.flac " +
+    os.system("sox \"" + sys.argv[2] + "\" " +
               stim["label"] +
               ".flac trim " +
               str(stim["start"]) +
