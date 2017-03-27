@@ -33,14 +33,12 @@ task extractWav(type: Copy) {
 task extractTxt(type: Copy) {
     dependsOn downloadData
     from zipTree(dataZip), {
-        include '**/txt/*.txt'
+        include '**/text/*.txt'
         eachFile {
             it.path = it.name
         }
     }
-    into "$buildDir/txt"
-
-    //already have texts (used as input for MAUS)
+    into "$buildDir/text"
 }
 
 task extractTG(type: Copy) {
@@ -56,7 +54,7 @@ task extractTG(type: Copy) {
 
 task makeLab(type: Exec) {
     dependsOn extractTG
-    def script = file("$rootDir/scripts/tg_to_xwaves.praat")
+    def script = file("$scriptDir/tg_to_xwaves.praat")
     commandLine "praat", "--run", script, "$buildDir/tg"
 }
 
