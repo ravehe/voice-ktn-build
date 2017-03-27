@@ -15,6 +15,8 @@ version '0.1-SNAPSHOT'
 //sourceCompatibility = 1.8
 
 import de.undercouch.gradle.tasks.download.Download
+
+def scriptDir = "$rootDir/scripts"
 def dataURL = "https://github.com/ioonaa/voice-ktn-data/archive/master.zip"
 def dataZip = "$buildDir/data.zip"
 
@@ -28,6 +30,10 @@ task downloadData(type: Download) {
 task extractWav(type: Copy) {
     //cut flac
     //convert to 1616
+task extractWav(type: Exec) {
+    dependsOn downloadFlac
+    /* write that Python must be installed */
+    commandLine "python", file("$scriptDir/yaml_cut_wav_1616.py"), file(flacFile)
 }
 
 task extractTxt(type: Copy) {
