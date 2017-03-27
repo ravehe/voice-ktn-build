@@ -35,7 +35,7 @@ task downloadFlac(type: Download) {
     overwrite false
 }
 
-task extactYaml(type: Copy) {
+task extractYaml(type: Copy) {
     dependsOn downloadData
     from zipTree(dataZip), {
         include '**/*.yaml'
@@ -47,7 +47,7 @@ task extactYaml(type: Copy) {
 }
 
 task extractWav(type: Exec) {
-    dependsOn downloadFlac, extactYaml
+    dependsOn downloadFlac, extractYaml
     /* write that Python must be installed */
     workingDir "$buildDir/"
     commandLine "python", file("$scriptDir/yaml_cut_wav_1616.py"), file(yamlPath), file(flacPath)
