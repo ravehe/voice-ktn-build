@@ -134,6 +134,11 @@ legacyInit {
     dependsOn extractWav, extractTxt, makeLab
 }
 
+voice {
+    name = 'voicebuilding2017-group2'
+    gender = 'female'
+}
+
 configurations.all {
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
         if (details.requested.name == 'groovy-all') {
