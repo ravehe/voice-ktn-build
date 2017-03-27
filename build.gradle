@@ -19,17 +19,21 @@ import de.undercouch.gradle.tasks.download.Download
 def scriptDir = "$rootDir/scripts"
 def dataURL = "https://github.com/ioonaa/voice-ktn-data/archive/master.zip"
 def dataZip = "$buildDir/data.zip"
+def flacURL = "https://github.com/ioonaa/voice-ktn-data/releases/download/0.1/voice-ktn.flac"
+def flacPath = "$buildDir/ktn-voice.flac"
 
 task downloadData(type: Download) {
-    //how to handle up-to-date? (overwrite or output?)
     src dataURL
     dest dataZip
     overwrite false
 }
 
-task extractWav(type: Copy) {
-    //cut flac
-    //convert to 1616
+task downloadFlac(type: Download) {
+    src flacURL
+    dest flacPath
+    overwrite false
+}
+
 task extractWav(type: Exec) {
     dependsOn downloadFlac
     /* write that Python must be installed */
