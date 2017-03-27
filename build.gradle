@@ -21,6 +21,7 @@ def dataURL = "https://github.com/ioonaa/voice-ktn-data/archive/master.zip"
 def dataZip = "$buildDir/data.zip"
 def flacURL = "https://github.com/ioonaa/voice-ktn-data/releases/download/0.1/voice-ktn.flac"
 def flacPath = "$buildDir/ktn-voice.flac"
+def yamlPath = "$buildDir/voice-ktn.yaml"
 
 task downloadData(type: Download) {
     src dataURL
@@ -34,10 +35,21 @@ task downloadFlac(type: Download) {
     overwrite false
 }
 
+task extactYaml(type: Copy) {
+    dependsOn downloadData
+    from zipTree(dataZip), {
+        include '**/*.yaml'
+        eachFile {
+            it.path = it.name
+        }
+    }
+    into "$buildDir/"
+}
+
 task extractWav(type: Exec) {
-    dependsOn downloadFlac
+    dependsOn downloadFlac, extactYaml
     /* write that Python must be installed */
-    commandLine "python", file("$scriptDir/yaml_cut_wav_1616.py"), file(flacFile)
+    commandLine "python", file("$scriptDir/yaml_cut_wav_1616.py"), file(yamlPath), file(flacPath)
 }
 
 task extractTxt(type: Copy) {
