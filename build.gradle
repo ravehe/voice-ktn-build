@@ -15,6 +15,7 @@ version '0.1-SNAPSHOT'
 //sourceCompatibility = 1.8
 
 import de.undercouch.gradle.tasks.download.Download
+import groovy.io.FileType
 
 def scriptDir = "$rootDir/scripts"
 def dataURL = "https://github.com/ioonaa/voice-ktn-data/archive/master.zip"
@@ -56,6 +57,18 @@ task extractWav {
         exec {
             commandLine "python", file("$scriptDir/yaml_cut_wav_1616.py"), file(yamlPath), file(flacPath)
         }
+        file("$rootDir/").eachFileMatch(FileType.FILES, ~/.*\.wav/) { wavfile ->
+            def filename = wavfile.name//.lastIndexOf('.').with { it != -1 ? wavfile.name[0 ..< it] : wavfile.name }
+            file(wavfile).renameTo(file("$buildDir/wav/$filename"))
+        }
+        file("$rootDir/").eachFileMatch(FileType.FILES, ~/.*\.flac/) { flacfile ->
+            file(flacfile).delete()
+        }
+    }
+}
+
+task organizeWav {
+
 }
 
 task extractTxt(type: Copy) {
