@@ -82,6 +82,7 @@ task makeLab(type: Exec) {
 }
 
 task moveLab(type: Copy) {
+    dependsOn makeLab
     from "$rootDir/scripts/", {
         include '**/*.lab'
     }
@@ -131,7 +132,7 @@ task moveLab(type: Copy) {
 }
 
 legacyInit {
-    dependsOn extractWav, extractTxt, makeLab
+    dependsOn extractWav, extractTxt, moveLab
 }
 
 voice {
