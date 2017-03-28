@@ -49,6 +49,7 @@ task extractYaml(type: Copy) {
 
 task extractWav(type: Exec) {
     dependsOn downloadFlac, extractYaml
+    outputs.dir "$buildDir/wav/"
     /* write that Python must be installed */
     workingDir "$buildDir/"
     commandLine "python", file("$scriptDir/yaml_cut_wav_1616.py"), file(yamlPath), file(flacPath)
