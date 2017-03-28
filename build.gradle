@@ -28,6 +28,7 @@ task downloadData(type: Download) {
     src dataURL
     dest dataZip
     overwrite false
+    onlyIfNewer true
 }
 
 task downloadFlac(type: Download) {
