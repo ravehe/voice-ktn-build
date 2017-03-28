@@ -37,6 +37,7 @@ task downloadFlac(type: Download) {
 
 task extractYaml(type: Copy) {
     dependsOn downloadData
+    outputs.file yamlPath
     from zipTree(dataZip), {
         include '**/*.yaml'
         eachFile {
