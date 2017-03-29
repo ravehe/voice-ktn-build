@@ -48,8 +48,18 @@ task extractChronoTG (type: Copy) {
     into "$buildDir/"
 }
 
+    task createYaml {
+    dependsOn extractChronoTG
+    doLast {
+        exec {
+            def script = file("$scriptDir/tg_to_yaml.praat")
+            commandLine "praat", "--run", script, "$buildDir/voice-ktn-chrono.TextGrid", "$buildDir/voice-ktn.yaml"
+        }
+    }
+}
+
 task extractWav {
-    dependsOn downloadFlac, extractYaml
+    dependsOn downloadFlac, createYaml
     outputs.dir "$buildDir/wav/"
     /* write that Python must be installed */
     doLast {
@@ -65,10 +75,6 @@ task extractWav {
             file(flacfile).delete()
         }
     }
-}
-
-task organizeWav {
-
 }
 
 task extractTxt(type: Copy) {
