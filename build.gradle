@@ -99,14 +99,14 @@ task extractTG(type: Copy) {
     into "$buildDir/tg"
 }
 
-task makeLab(type: Exec) {
+task createLab(type: Exec) {
     dependsOn extractTG
     def script = file("$scriptDir/tg_to_xwaves.praat")
     commandLine "praat", "--run", script, "$buildDir/tg"
 }
 
 task moveLab(type: Copy) {
-    dependsOn makeLab
+    dependsOn createLab
     from "$rootDir/scripts/", {
         include '**/*.lab'
     }
