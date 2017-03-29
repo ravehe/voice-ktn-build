@@ -37,11 +37,10 @@ task downloadFlac(type: Download) {
     overwrite false
 }
 
-task extractYaml(type: Copy) {
+task extractChronoTG (type: Copy) {
     dependsOn downloadData
-    outputs.file yamlPath
     from zipTree(dataZip), {
-        include '**/*.yaml'
+        include '**/voice-ktn-chrono.TextGrid'
         eachFile {
             it.path = it.name
         }
