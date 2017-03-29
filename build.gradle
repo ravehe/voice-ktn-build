@@ -153,6 +153,11 @@ task moveLab(type: Copy) {
         }
         fields.join(' ')
     }
+    doLast {
+        file("$scriptDir/").eachFileMatch(FileType.FILES, ~/.*\.lab/) { labfile ->
+            file(labfile).delete()
+        }
+    }
 }
 
 legacyInit {
