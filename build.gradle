@@ -72,18 +72,26 @@ task extractChronoTG (type: Copy) {
 task extractWav {
     dependsOn downloadFlac, createYaml
     outputs.dir "$buildDir/wav/"
-    /* write that Python must be installed */
     doLast {
         file("$buildDir/wav").mkdir()
-        exec {
-            commandLine "python", file("$scriptDir/yaml_cut_wav_1616.py"), file(yamlPath), file(flacPath)
-        }
-        file("$rootDir/").eachFileMatch(FileType.FILES, ~/.*\.wav/) { wavfile ->
-            def filename = wavfile.name//.lastIndexOf('.').with { it != -1 ? wavfile.name[0 ..< it] : wavfile.name }
-            file(wavfile).renameTo(file("$buildDir/wav/$filename"))
-        }
-        file("$rootDir/").eachFileMatch(FileType.FILES, ~/.*\.flac/) { flacfile ->
-            file(flacfile).delete()
+        def yaml = new Yaml().load(file(yamlPath).text.trim())
+        yaml.stimuli.each { stim ->
+            exec {
+                commandLine "sox",
+                            file(flacPath), //input file
+                            "${buildDir}/wav/${stim.label}.flac", //output file
+                            "trim",
+                            stim.start, //trim start
+                            "=" + stim.end //trim end
+            }
+            exec {
+                commandLine "sox",
+                            "${buildDir}/wav/${stim.label}.flac", //input file
+                            "-t", "wav", //to wav
+                            "-r", "16000", "-b", "16", //resample
+                            "${buildDir}/wav/${stim.label}.wav"
+            }
+            file("${buildDir}/wav/${stim.label}.flac").delete()
         }
     }
 }
