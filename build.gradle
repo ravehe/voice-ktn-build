@@ -7,6 +7,19 @@ buildscript {
 plugins {
     id "de.dfki.mary.voicebuilding-legacy" version "5.2.0"
     id "de.undercouch.download" version "3.2.0"
+    id 'cz.malohlava.visteg' version '1.0.0' //for visual task graph
+}
+
+visteg {
+    enabled        = true
+    colouredNodes  = true
+    colouredEdges  = true
+    destination    = 'build/reports/visteg.dot'
+    exporter       = 'dot'
+    colorscheme    = 'spectral11'
+    nodeShape      = 'box'
+    startNodeShape = 'hexagon'
+    endNodeShape   = 'doubleoctagon'
 }
 
 //apply plugin: 'java'
@@ -59,7 +72,7 @@ task extractChronoTG (type: Copy) {
     into "$buildDir/"
 }
 
-    task createYaml {
+task createYaml {
     dependsOn extractChronoTG
     doLast {
         exec {
